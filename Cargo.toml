@@ -1,0 +1,17 @@
+[package]
+name = "rust-sonora"
+version = "0.1.0"
+authors = ["d-mckee <devon.l.mckee@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[dependencies.serenity]
+version = "0.9.0"
+features = ["cache", "framework", "standard_framework", "rustls_backend"]
+
+[dependencies.tokio]
+version = "0.2"
+features = ["macros"]

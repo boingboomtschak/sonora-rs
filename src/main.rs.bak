@@ -1,0 +1,55 @@
+use std::env;
+use serenity::{
+    async_trait,
+    model::{channel::Message, gateway::Ready},
+    client::{Client, Context},
+    prelude::*,
+};
+
+const HELP_MESSAGE: &str = "
+Help:
+
+foo
+bar
+baz
+";
+
+struct Handler;
+
+#[async_trait]
+impl EventHandler for Handler {
+    async fn message(&self, ctx: Context, msg: Message) {
+        if msg.content == "!ping" {
+            if let Err(why) = msg.channel_id.say(&ctx.http, "Pong!").await {
+                println!("Error sending message: {:?}", why);
+            }
+        } else if msg.content == "!help" {
+            if let Err(why) = msg.channel_id.say(&ctx.http, HELP_MESSAGE).await {
+                println!("Error sending message: {:?}", why);
+            }
+        } else if msg.content == "!microwave" {
+
+        }
+    }
+    async fn ready(&self, _: Context, ready: Ready) {
+        println!("{} is connected!", ready.user.name);
+    }
+}
+
+#[tokio::main]
+async fn main() {
+    println!("Starting up bot...");
+    let token = env::var("DISCORD_TOKEN").expect("Expected Discord token in envvars!");
+    let mut client = Client::builder(&token)
+        .with_framework(|f| f
+            .configure(|c| c.prefix("!"))
+            .group(&PUBLIC_GROUP)
+        )
+        .await
+        .expect("Error creating client!");
+    println!("Started up client!");
+    println!("Listening for events...");
+    if let Err(why) = client.start().await {
+        println!("Client error: {:?}", why);
+    }
+}
