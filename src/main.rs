@@ -26,7 +26,7 @@ impl EventHandler for Handler {
 }
 
 #[group]
-#[commands(ping)]
+#[commands(ping, microwave)]
 struct General;
 
 #[tokio::main]
