@@ -1,4 +1,5 @@
 mod commands;
+mod messages;
 
 use std::env;
 use serenity::{
@@ -7,7 +8,10 @@ use serenity::{
     model::{channel::Message, gateway::Ready},
     framework::{
         StandardFramework,
-        standard::macros::group,
+        standard::macros::{
+            hook,
+            group,
+        },
     },
     prelude::*,
 };
@@ -26,8 +30,14 @@ impl EventHandler for Handler {
 }
 
 #[group]
-#[commands(ping, microwave)]
+#[commands(ping, microwave, fmicrowave)]
 struct General;
+
+#[hook]
+async fn before(_ctx: &Context, msg: &Message, command_name: &str) -> bool {
+    println!("Got command '{}' from user '{}'", command_name, msg.author.name);
+    true
+}
 
 #[tokio::main]
 async fn main() {

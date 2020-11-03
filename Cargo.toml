@@ -1,5 +1,5 @@
 [package]
-name = "rust-sonora"
+name = "sonora-rs"
 version = "0.1.0"
 authors = ["d-mckee <devon.l.mckee@gmail.com>"]
 edition = "2018"
