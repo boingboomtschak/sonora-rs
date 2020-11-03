@@ -32,6 +32,8 @@ struct General;
 #[tokio::main]
 async fn main() {
     println!("Starting up bot...");
+    dotenv::dotenv().expect("Failed to load .env file!");
+    println!("Loading token from dotenv...");
     let token = env::var("DISCORD_TOKEN").expect("Expected 'DISCORD_TOKEN' in envvars!");
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("!"))
