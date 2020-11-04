@@ -10,15 +10,12 @@ use serenity::{
         StandardFramework,
         standard::macros::{
             hook,
-            group,
         },
     },
     prelude::*,
 };
 
-use commands::{
-    generic::*,
-};
+use crate::commands::*;
 
 struct Handler;
 
@@ -28,10 +25,6 @@ impl EventHandler for Handler {
         println!("Connected as {}", ready.user.name);
     }
 }
-
-#[group]
-#[commands(ping, microwave, fmicrowave)]
-struct General;
 
 #[hook]
 async fn before(_ctx: &Context, msg: &Message, command_name: &str) -> bool {
@@ -47,7 +40,8 @@ async fn main() {
     let token = env::var("DISCORD_TOKEN").expect("Expected 'DISCORD_TOKEN' in envvars!");
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("!"))
-        .group(&GENERAL_GROUP);
+        .group(&generic::GENERIC_GROUP)
+        .group(&fun::FUN_GROUP);
     let mut client = Client::builder(&token)
         .framework(framework)
         .event_handler(Handler)
