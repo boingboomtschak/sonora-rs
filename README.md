@@ -1,5 +1,7 @@
 # sonora-rs
 
+![GitHub top language](https://img.shields.io/github/languages/top/d-mckee/sonora-rs?color=orange&style=flat-square)![GitHub last commit](https://img.shields.io/github/last-commit/d-mckee/sonora-rs?style=flat-square)![GitHub repo size](https://img.shields.io/github/repo-size/d-mckee/sonora-rs?style=flat-square) 
+
 A custom Discord bot, written in Rust, using serenity-rs as a wrapper for the Discord API. 
 
 ## Description
