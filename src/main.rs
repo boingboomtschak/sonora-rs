@@ -1,5 +1,6 @@
 mod commands;
 mod messages;
+mod utils;
 
 use std::env;
 use serenity::{
