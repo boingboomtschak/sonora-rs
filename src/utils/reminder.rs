@@ -1,6 +1,14 @@
 
 // Reminder types
 
+pub struct Reminder {
+    pub time: String,
+    pub message: String,
+}
+
+
+// everything below here is overengineering and is only here so I don't forget rust syntax
+/* 
 pub enum ReminderReturn {
     User,
     Channel
@@ -50,5 +58,5 @@ impl ReminderDelay {
 
 
 impl Reminder {
-
-}
+    
+} */

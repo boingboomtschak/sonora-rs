@@ -6,10 +6,13 @@ use serenity::framework::standard::{
         command,
         group,
     },
+    Args
 };
 
+use crate::utils::reminder::*;
+
 #[group]
-#[commands(help, ping, remindme)]
+#[commands(help, ping, remindme, embed)]
 pub struct Generic;
 
 #[command]
@@ -29,9 +32,28 @@ async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
 }
 
 #[command]
-async fn remindme(ctx: &Context, msg: &Message) -> CommandResult {
-    if let Err(why) = msg.channel_id.say(&ctx.http, "Reminder set to `do something` at `yyyy/mm/dd hh:mm`").await {
+async fn remindme(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    let reminder = Reminder {
+        time: args.single::<String>().unwrap(),
+        message: args.single::<String>().unwrap()
+    };
+    if let Err(why) = msg.channel_id.say(&ctx.http, format!("Reminder - time: `{}`, message: `{}`", reminder.time, reminder.message)).await {
         println!("Error running 'remindme' command: {:?}", why);
+    }
+    Ok(())
+}
+
+#[command]
+async fn embed(ctx: &Context, msg: &Message) -> CommandResult {
+    if let Err(why) = msg.channel_id.send_message(&ctx.http, |m | {
+        m.embed(|e | {
+            e.title("This is a cat!");
+            e.description("This is a description of the cat!");
+            return e;
+        });
+        return m;
+    }).await {
+        println!("Error sending embed: {}", why);
     }
     Ok(())
 }
