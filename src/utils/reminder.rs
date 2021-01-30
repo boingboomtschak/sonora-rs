@@ -2,8 +2,9 @@
 // Reminder types
 
 pub struct Reminder {
-    pub time: String,
-    pub message: String,
+    pub time: Option<String>,
+    pub message: Option<String>,
+    pub recip: Option<String>,
 }
 
 

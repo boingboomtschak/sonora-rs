@@ -32,12 +32,21 @@ async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
 }
 
 #[command]
+#[aliases("remind", "rm")]
 async fn remindme(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
-    let reminder = Reminder {
-        time: args.single::<String>().unwrap(),
-        message: args.single::<String>().unwrap()
+    // Instantiate Reminder struct with time, message, and recipients
+    let mut reminder = Reminder {
+        time: Some(args.single::<String>().unwrap()),
+        message: Some(args.single_quoted::<String>().unwrap()),
+        recip: None,
     };
-    if let Err(why) = msg.channel_id.say(&ctx.http, format!("Reminder - time: `{}`, message: `{}`", reminder.time, reminder.message)).await {
+    if args.is_empty() {
+        reminder.recip = Some(String::from("channel"));
+    } else {
+        reminder.recip = Some(args.single::<String>().unwrap());
+    }
+    let response = format!("Reminder - time: `{}`, message: `{}`, recipient: `{}`", reminder.time.unwrap(), reminder.message.unwrap(), reminder.recip.unwrap());
+    if let Err(why) = msg.channel_id.say(&ctx.http, response).await {
         println!("Error running 'remindme' command: {:?}", why);
     }
     Ok(())
