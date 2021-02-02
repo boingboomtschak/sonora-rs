@@ -16,6 +16,7 @@ use crate::utils::reminder::*;
 pub struct Generic;
 
 #[command]
+#[aliases("h")]
 async fn help(ctx: &Context, msg: &Message) -> CommandResult {
     if let Err(why) = msg.channel_id.say(&ctx.http, crate::messages::HELP_MESSAGE).await {
         println!("Error running 'help' command: {:?}", why);
@@ -36,10 +37,20 @@ async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
 async fn remindme(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     // Instantiate Reminder struct with time, message, and recipients
     let mut reminder = Reminder {
-        time: Some(args.single::<String>().unwrap()),
-        message: Some(args.single_quoted::<String>().unwrap()),
+        time: None,
+        message: None,
         recip: None,
     };
+    if args.is_empty() {
+        msg.channel_id.say(&ctx.http, "Missing reminder time.").await?;
+    } else {
+        reminder.time = Some(Reminder::parse_time(args.single::<String>().unwrap()).unwrap());
+    }
+    if args.is_empty() {
+        msg.channel_id.say(&ctx.http, "Missing reminder message.").await?;
+    } else {
+        reminder.message = Some(args.single_quoted::<String>().unwrap());
+    }
     if args.is_empty() {
         reminder.recip = Some(String::from("channel"));
     } else {
